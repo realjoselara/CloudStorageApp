@@ -36,7 +36,20 @@ class CloudStorageApplicationTests {
 
 	@BeforeEach
 	public void beforeEach() {
+
 		this.driver = new ChromeDriver();
+		// Test to signup
+		driver.get("http://localhost:" + this.port + "/signup");
+		WebElement inputFirstName = driver.findElement(By.id("inputFirstName"));
+		inputFirstName.sendKeys(firstName);
+		WebElement inputLastName = driver.findElement(By.id("inputLastName"));
+		inputLastName.sendKeys(lastName);
+		WebElement inputUsername = driver.findElement(By.id("inputUsername"));
+		inputUsername.sendKeys(userName);
+		WebElement inputPassword = driver.findElement(By.id("inputPassword"));
+		inputPassword.sendKeys(password);
+		WebElement signUpButton = driver.findElement(By.id("buttonSignUp"));
+		signUpButton.click();
 	}
 
 	@AfterEach
@@ -47,14 +60,14 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void getLoginPage() {
+	public void GetLoginPage() {
 		driver.get("http://localhost:" + this.port + "/login");
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
 
 	@Test
-	public void getUnauthorizedResultPage() {
+	public void GetUnauthorizedResultPage() {
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		driver.get("http://localhost:" + this.port + "/result");
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("buttonLogin")));
@@ -62,12 +75,13 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void getUnauthorizedHomePage() {
+	public void GetUnauthorizedHomePage() {
 		driver.get("http://localhost:" + this.port + "/home");
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
 	@Test
+	@Order(1)
 	public void CreateUserTest() throws InterruptedException {
 		WebDriverWait wait = new WebDriverWait(driver, 60);
 
@@ -107,29 +121,17 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(2)
 	public void CreateNoteTest() throws InterruptedException {
 		WebDriverWait wait = new WebDriverWait (driver, 30);
 		JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
 
-		// Test to signup
-		driver.get("http://localhost:" + this.port + "/signup");
-		WebElement inputFirstName = driver.findElement(By.id("inputFirstName"));
-		inputFirstName.sendKeys(firstName);
-		WebElement inputLastName = driver.findElement(By.id("inputLastName"));
-		inputLastName.sendKeys(lastName);
-		WebElement inputUsername = driver.findElement(By.id("inputUsername"));
-		inputUsername.sendKeys(userName);
-		WebElement inputPassword = driver.findElement(By.id("inputPassword"));
-		inputPassword.sendKeys(password);
-		WebElement signUpButton = driver.findElement(By.id("buttonSignUp"));
-		signUpButton.click();
-
 
 		// login
 		driver.get("http://localhost:" + this.port + "/login");
-		inputUsername = wait.until(webDriver ->driver.findElement(By.id("inputUsername")));
+		WebElement inputUsername = wait.until(webDriver ->driver.findElement(By.id("inputUsername")));
 		inputUsername.sendKeys(userName);
-		inputPassword = wait.until(webDriver ->driver.findElement(By.id("inputPassword")));
+		WebElement inputPassword = wait.until(webDriver ->driver.findElement(By.id("inputPassword")));
 		inputPassword.sendKeys(password);
 		WebElement loginButton = wait.until(webDriver -> driver.findElement(By.id("buttonLogin")));
 		loginButton.click();
@@ -165,30 +167,18 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(3)
 	public void UpdateNoteTest() throws InterruptedException {
 		WebDriverWait wait = new WebDriverWait (driver, 30);
 		JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
 		String newNoteTitle = "new note title";
 
-		// signup
-		driver.get("http://localhost:" + this.port + "/signup");
-		WebElement inputFirstName = driver.findElement(By.id("inputFirstName"));
-		inputFirstName.sendKeys(firstName);
-		WebElement inputLastName = driver.findElement(By.id("inputLastName"));
-		inputLastName.sendKeys(lastName);
-		WebElement inputUsername = driver.findElement(By.id("inputUsername"));
-		inputUsername.sendKeys(userName);
-		WebElement inputPassword = driver.findElement(By.id("inputPassword"));
-		inputPassword.sendKeys(password);
-		WebElement signUpButton = driver.findElement(By.id("buttonSignUp"));
-		signUpButton.click();
-
 
 		// login
 		driver.get("http://localhost:" + this.port + "/login");
-		inputUsername = driver.findElement(By.id("inputUsername"));
+		WebElement inputUsername = driver.findElement(By.id("inputUsername"));
 		inputUsername.sendKeys(userName);
-		inputPassword = driver.findElement(By.id("inputPassword"));
+		WebElement inputPassword = driver.findElement(By.id("inputPassword"));
 		inputPassword.sendKeys(password);
 		WebElement loginButton = driver.findElement(By.id("buttonLogin"));
 		loginButton.click();
@@ -248,29 +238,17 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(4)
 	public void DeleteNoteTest() throws InterruptedException {
 
 		WebDriverWait wait = new WebDriverWait (driver, 30);
 		JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
 
-		// signup
-		driver.get("http://localhost:" + this.port + "/signup");
-		WebElement inputFirstName = driver.findElement(By.id("inputFirstName"));
-		inputFirstName.sendKeys(firstName);
-		WebElement inputLastName = driver.findElement(By.id("inputLastName"));
-		inputLastName.sendKeys(lastName);
+		//login
+		driver.get("http://localhost:" + this.port + "/login");
 		WebElement inputUsername = driver.findElement(By.id("inputUsername"));
 		inputUsername.sendKeys(userName);
 		WebElement inputPassword = driver.findElement(By.id("inputPassword"));
-		inputPassword.sendKeys(password);
-		WebElement signUpButton = driver.findElement(By.id("buttonSignUp"));
-		signUpButton.click();
-
-		//login
-		driver.get("http://localhost:" + this.port + "/login");
-		inputUsername = driver.findElement(By.id("inputUsername"));
-		inputUsername.sendKeys(userName);
-		inputPassword = driver.findElement(By.id("inputPassword"));
 		inputPassword.sendKeys(password);
 		WebElement loginButton = driver.findElement(By.id("buttonLogin"));
 		loginButton.click();
@@ -308,6 +286,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(5)
 	public void CreateCredentialTest() {
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
@@ -364,9 +343,6 @@ class CloudStorageApplicationTests {
 
 		Assertions.assertEquals("Home", driver.getTitle());
 
-		navCredentialsTab = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("nav-credentials-tab")));
-
-		driver.get("http://localhost:" + this.port + "/home");
 		WebElement credentialsTab = driver.findElement(By.id("nav-credentials-tab"));
 		javascriptExecutor.executeScript("arguments[0].click()", credentialsTab);
 		WebElement credentialsTable = driver.findElement(By.id("credentialTable"));
@@ -376,7 +352,6 @@ class CloudStorageApplicationTests {
 
 		for (int i=0; i < notesList.size(); i++) {
 			WebElement element = notesList.get(i);
-			System.out.println(element.getAttribute("innerHTML"));
 			if (element.getAttribute("innerHTML").equals(credURL)) {
 				created = true;
 				break;
@@ -386,29 +361,17 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(6)
 	public void UpdateCredentialTest() throws InterruptedException {
 		WebDriverWait wait = new WebDriverWait (driver, 30);
 		JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
 		String newCredUsername = "AwesomeUser";
 
-		// signup
-		driver.get("http://localhost:" + this.port + "/signup");
-		WebElement inputFirstName = driver.findElement(By.id("inputFirstName"));
-		inputFirstName.sendKeys(firstName);
-		WebElement inputLastName = driver.findElement(By.id("inputLastName"));
-		inputLastName.sendKeys(lastName);
+		//login
+		driver.get("http://localhost:" + this.port + "/login");
 		WebElement inputUsername = driver.findElement(By.id("inputUsername"));
 		inputUsername.sendKeys(userName);
 		WebElement inputPassword = driver.findElement(By.id("inputPassword"));
-		inputPassword.sendKeys(password);
-		WebElement signUpButton = driver.findElement(By.id("buttonSignUp"));
-		signUpButton.click();
-
-		//login
-		driver.get("http://localhost:" + this.port + "/login");
-		inputUsername = driver.findElement(By.id("inputUsername"));
-		inputUsername.sendKeys(userName);
-		inputPassword = driver.findElement(By.id("inputPassword"));
 		inputPassword.sendKeys(password);
 		WebElement loginButton = driver.findElement(By.id("buttonLogin"));
 		loginButton.click();
@@ -470,6 +433,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(7)
 	public void DeleteCredentialTest() {
 		WebDriverWait wait = new WebDriverWait (driver, 30);
 		JavascriptExecutor jse =(JavascriptExecutor) driver;

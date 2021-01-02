@@ -14,10 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController {
 
-    private NotesService noteService;
-    private FileService fileService;
-    private AuthService AuthService;
-    private UserService userService;
+    private final NotesService noteService;
+    private final FileService fileService;
+    private final AuthService AuthService;
+    private final UserService userService;
 
     @Autowired
     public HomeController(NotesService noteService, FileService fileService, AuthService AuthService, UserService userService) {
@@ -32,6 +32,7 @@ public class HomeController {
         Usuario user = userService.loadUserByUsername(authentication.getName());
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("notes", this.noteService.getAllNotes(user.getUserId()));
+        modelAndView.addObject("decrypt", this.AuthService);
         modelAndView.addObject("credentials", this.AuthService.getAllCredential(user.getUserId()));
         modelAndView.addObject("files", this.fileService.getAllFilesByUserId(user.getUserId()));
         return modelAndView;

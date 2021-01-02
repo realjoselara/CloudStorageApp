@@ -20,10 +20,9 @@ public class RegistrationController {
 
         try {
             userService.register(user);
+            return "redirect:login?success_register";
         } catch (Exception e) {
             return "redirect:signup?error";
         }
-
-        return "redirect:signup?success";
     }
 }

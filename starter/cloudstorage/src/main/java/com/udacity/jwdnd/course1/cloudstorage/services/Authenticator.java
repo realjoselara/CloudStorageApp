@@ -15,15 +15,13 @@ import java.util.ArrayList;
 @Service
 public class Authenticator implements AuthenticationProvider  {
 
-    private UserMapper userMapper;
-    private CredentialMapper credentialMapper;
-    private HashService hashService;
+    private final UserMapper userMapper;
+    private final HashService hashService;
 
     @Autowired
-    public Authenticator(CredentialMapper credentialMapper, UserMapper userMapper,HashService hashService){
+    public Authenticator(UserMapper userMapper,HashService hashService){
         this.userMapper = userMapper;
         this.hashService = hashService;
-        this.credentialMapper = credentialMapper;
     }
 
     @Override

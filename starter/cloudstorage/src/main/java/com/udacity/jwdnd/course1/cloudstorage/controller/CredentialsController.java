@@ -1,6 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
-import com.udacity.jwdnd.course1.cloudstorage.entity.Credentials;
+import com.udacity.jwdnd.course1.cloudstorage.entity.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.entity.Usuario;
 import com.udacity.jwdnd.course1.cloudstorage.services.AuthService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
@@ -24,10 +24,11 @@ public class CredentialsController {
     }
 
     @PostMapping("/credential")
-    public String saveOrUpdateCredentials(Authentication authentication, Credentials credential) {
+    public String saveOrUpdateCredentials(Authentication authentication, Credential credential) {
         Usuario user = userService.loadUserByUsername(authentication.getName());
-        if (credential.getCredentialid() != null) {
-            authService.updateCredential(credential);
+        Credential tempCredential = authService.getCredentialByUsername(credential.getUsername());
+        if (credential.getCredentialId() != null || tempCredential != null) {
+            authService.updateCredential(credential, user.getUserId());
         }
         else {
             authService.addCredential(credential, user.getUserId());

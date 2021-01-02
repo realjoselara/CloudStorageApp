@@ -24,6 +24,10 @@ public class FileService {
         return fileMapper.findById(id, userId);
     }
 
+    public File getByFileName(String filename) {
+        return fileMapper.findByNameAndUserId(filename);
+    }
+
     public List<File> getAllFilesByUserId(Long userid) throws Exception {
         List<File> files = fileMapper.findByUserId(userid);
         return files;

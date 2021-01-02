@@ -1,6 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.mapper;
 
-import com.udacity.jwdnd.course1.cloudstorage.entity.Credentials;
+import com.udacity.jwdnd.course1.cloudstorage.entity.Credential;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -11,20 +11,24 @@ import java.util.*;
 public interface CredentialMapper {
 
     @Select("SELECT * FROM CREDENTIALS")
-    List<Credentials> findAll();
+    List<Credential> findAll();
 
     @Select("SELECT * FROM CREDENTIALS WHERE credentialid = #{credentialid}")
-    public Credentials findOne(int id);
+    public Credential findOne(long credentialid);
+
+
+    @Select("SELECT * FROM CREDENTIALS WHERE username = #{username}")
+    public Credential findCredentialByUsername(String username);
 
     @Select("SELECT * FROM CREDENTIALS WHERE userid = #{userid}")
-    public List<Credentials> findByUserId(Long userid);
+    public List<Credential> findByUserId(Long userid);
 
     @Insert("INSERT INTO CREDENTIALS (url, username, key, password, userid) VALUES (#{credential.url}, #{credential.username}, #{credential.key}, #{credential.password}, #{userid})")
-    public int insert(Credentials credential, Long userid);
+    public int insert(Credential credential, long userid);
 
     @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialid} AND userid = #{userid}")
-    public int delete(Long credentialid, Long userid);
+    public int delete(Long credentialid, long userid);
 
-    @Update("UPDATE CREDENTIALS SET url = #{url}, username = #{username}, key = #{key}, password = #{password} WHERE credentialid = #{credentialid}")
-    public int update(Credentials credential);
+    @Update("UPDATE CREDENTIALS SET url = #{credential.url}, username = #{credential.username}, key = #{credential.key}, password = #{credential.password} WHERE credentialid = #{credential.credentialId} AND userid = #{userid}")
+    public int update(Credential credential, long userid);
 }

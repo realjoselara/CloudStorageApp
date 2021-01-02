@@ -13,7 +13,7 @@ public class ConfigController implements WebMvcConfigurer {
         registry.addViewController("/result").setViewName("result");
         registry.addViewController("/signup").setViewName("signup");
         registry.addViewController("/logout").setViewName("login");
-        registry.addViewController("/error").setViewName("error");
+//        registry.addViewController("/error").setViewName("error");
     }
 
     @Override

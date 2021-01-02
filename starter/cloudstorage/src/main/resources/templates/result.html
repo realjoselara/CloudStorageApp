@@ -25,6 +25,12 @@
                     <span th:unless="${param.message}">Your changes were not saved.</span>
                     Click <a th:href="@{/dashboard}">here</a> to continue.</div>
             </div>
+            <div th:if="${param.error_file_already_exist}" class="alert alert-danger fill-parent">
+                <h1 class="display-5">Error</h1>
+                <div>
+                    <span>Your changes were not saved. This file already exist.</span>
+                    Click <a th:href="@{/dashboard}">here</a> to continue.</div>
+            </div>
         </div>
     </body>
 </html>

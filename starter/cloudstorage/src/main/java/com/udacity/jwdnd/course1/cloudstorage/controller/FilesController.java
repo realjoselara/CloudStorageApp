@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -32,16 +33,24 @@ public class FilesController {
     @PostMapping("/file")
     public String saveFile(Authentication authentication, MultipartFile fileUpload) throws IOException {
         Usuario user = userService.loadUserByUsername(authentication.getName());
+        File file = fileService.getByFileName(fileUpload.getOriginalFilename());
+
         if (fileUpload.isEmpty()) {
             return "redirect:/result?error";
         }
+        if(file != null){
+            return "redirect:/result?error_file_already_exist";
+        }
+
         fileService.addFile(fileUpload, user.getUserId());
         return "redirect:/result?success";
+
     }
 
     @GetMapping("/file/delete/{id}")
-    public String deleteFile(@PathVariable("id") long fileid) throws IOException {
-        if (fileid > 0) {
+    public String deleteFile(@PathVariable("id") long fileid, Authentication authentication) throws IOException {
+        Usuario user = userService.loadUserByUsername(authentication.getName());
+        if(user != null && fileid > 0) {
             fileService.deleteFile(fileid);
             return "redirect:/result?success";
         }
@@ -50,29 +59,36 @@ public class FilesController {
 
     @GetMapping(value = "/file/download/{id}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody
-    ResponseEntity<Object> downloadFile(@PathVariable("id") long fileid, Authentication authentication) throws IOException {
+    ResponseEntity<Object> downloadFile(@PathVariable("id") long fileid, Authentication authentication) {
+        String message = "";
         Usuario user = userService.loadUserByUsername(authentication.getName());
         File file = fileService.getById(fileid, user.getUserId());
+        try {
 
-        if (file != null) {
-            HttpHeaders headers = new HttpHeaders();
+            if (file != null) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format(
+                        "attachment; filename=%s", file.getFileName()));
+                headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+                headers.add("Pragma", "no-cache");
+                headers.add("Expires", "0");
 
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format(
-                    "attachment; filename=%s", file.getFileName()));
-            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-            headers.add("Pragma", "no-cache");
-            headers.add("Expires", "0");
+                ByteArrayResource resource = new ByteArrayResource(file.getFileData());
+                return ResponseEntity
+                        .ok()
+                        .headers(headers)
+                        .contentType(MediaType.parseMediaType(file.getContentType()))
+                        .contentLength(file.getFileSize())
+                        .body(resource);
+            }
 
-            ByteArrayResource resource = new ByteArrayResource(file.getFileData());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-            return ResponseEntity
-                    .ok()
-                    .headers(headers)
-                    .contentType(MediaType.parseMediaType(file.getContentType()))
-                    .contentLength(file.getFileSize())
-                    .body(resource);
+        }
+        catch (Exception e){
+            message = "FAIL to upload " + file.getFileName() + "!";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

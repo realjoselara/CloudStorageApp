@@ -20,8 +20,7 @@
                     You successfully signed up! Please continue to the <a th:href="@{/login}">login</a> page.
                 </div>
                 <div th:if="${param.error}" class="alert alert-danger">
-                    <!--/*@thymesVar id="errorMessage" type="java.lang.String"*/-->
-                    <span th:text="${errorMessage}"></span>
+                    Username already exist! Please continue to the <a th:href="@{/login}">login</a> page or select a new username.
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
