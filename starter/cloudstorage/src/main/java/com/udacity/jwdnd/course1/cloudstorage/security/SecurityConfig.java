@@ -29,18 +29,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/**/*.css", "/**/*.js").permitAll()
-                .antMatchers("/signup", "/register").permitAll()
-                .antMatchers("/h2-console").permitAll()
-                .anyRequest().authenticated().and()
-                .formLogin()
+                    .antMatchers("/**/*.css", "/**/*.js").permitAll()
+                    .antMatchers("/signup", "/register").permitAll()
+                    .anyRequest().authenticated()
+                .and()
+                    .formLogin()
                     .loginPage("/login")
-                    .defaultSuccessUrl("/home", true)
-                    .permitAll()
+                    .defaultSuccessUrl("/home", true).permitAll()
+                    .loginPage("/login?success").defaultSuccessUrl("/home", true).permitAll()
                 .and()
                     .logout()
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/login?logout")
-                .permitAll();
+                    .permitAll();
     }
 }

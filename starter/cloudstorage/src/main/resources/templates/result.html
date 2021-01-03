@@ -25,6 +25,13 @@
                     <span th:unless="${param.message}">Your changes were not saved.</span>
                     Click <a th:href="@{/dashboard}">here</a> to continue.</div>
             </div>
+            <div th:if="${param.error_large_file}" class="alert alert-danger fill-parent">
+                <h1 class="display-5">Error</h1>
+                <div>
+                    <span th:if="${param.message}" th:text="${param.message}"></span>
+                    <span th:unless="${param.message}">Your changes were not saved. File is too large, file limit is 25MB.</span>
+                    Click <a th:href="@{/dashboard}">here</a> to continue.</div>
+            </div>
             <div th:if="${param.error_file_already_exist}" class="alert alert-danger fill-parent">
                 <h1 class="display-5">Error</h1>
                 <div>

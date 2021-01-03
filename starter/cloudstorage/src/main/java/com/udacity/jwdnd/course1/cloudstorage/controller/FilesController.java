@@ -31,7 +31,7 @@ public class FilesController {
     }
 
     @PostMapping("/file")
-    public String saveFile(Authentication authentication, MultipartFile fileUpload) throws IOException {
+    public String saveFile(Authentication authentication, MultipartFile fileUpload) {
         Usuario user = userService.loadUserByUsername(authentication.getName());
         File file = fileService.getByFileName(fileUpload.getOriginalFilename());
 
@@ -42,7 +42,15 @@ public class FilesController {
             return "redirect:/result?error_file_already_exist";
         }
 
-        fileService.addFile(fileUpload, user.getUserId());
+        try {
+            fileService.addFile(fileUpload, user.getUserId());
+        } catch (MaxUploadSizeExceededException e){
+            return "redirect:/result?error";
+        }
+        catch (IOException e){
+            return "redirect:/result?error";
+        }
+
         return "redirect:/result?success";
 
     }

@@ -21,13 +21,13 @@ class CloudStorageApplicationTests {
 	private int port;
 
 	private WebDriver driver;
-	private static String firstName = "Jose";
-	private static String lastName = "Lara";
-	private static String userName = "realjoselara";
-	private static String password = "123456690";
-	private static String noteTitle = "Testing Title";
-	private static String noteDescription = "Testing Testing, Hello from the other side.";
-	private static String credURL = "https://joselara.me";
+	private static final String firstName = "Jose";
+	private static final String lastName = "Lara";
+	private static final String userName = "realjoselara";
+	private static final String password = "123456690";
+	private static final String noteTitle = "Testing Title";
+	private static final String noteDescription = "Testing Testing, Hello from the other side.";
+	private static final String credURL = "https://joselara.me";
 
 	@BeforeAll
 	static void beforeAll() {

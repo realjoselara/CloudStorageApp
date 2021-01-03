@@ -37,6 +37,4 @@ public class HomeController {
         modelAndView.addObject("files", this.fileService.getAllFilesByUserId(user.getUserId()));
         return modelAndView;
     }
-
-
 }
