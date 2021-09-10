@@ -10,11 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
+
+    private final HashService hashPass;
 
     @Autowired
-    private HashService hashPass;
+    public UserService(UserMapper userMapper, HashService hashPass) {
+        this.userMapper = userMapper;
+        this.hashPass = hashPass;
+    }
 
     public Usuario loadUserByUsername(String username) throws UsernameNotFoundException{
         Usuario user = userMapper.findByUsername(username);
